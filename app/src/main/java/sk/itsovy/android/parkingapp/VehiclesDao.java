@@ -24,7 +24,11 @@ public interface VehiclesDao {
     @Delete
     void deleteVehicle(Vehicle vehicle);
 
-    @Delete
+    @Query("DELETE FROM vehicles")
+    void deleteAll();
+
+    // priamo delete nemozem dat lebo ocakava entity
+    @Query("DELETE FROM vehicles WHERE plate=:plate")
     void deleteVehicle(String plate);
 
 }

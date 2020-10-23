@@ -7,6 +7,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,8 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
         VehiclesAdapter adapter = new VehiclesAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ViewModelProvider provider = new ViewModelProvider(this);
+        VehiclesViewModel vehiclesViewModel = provider.get(VehiclesViewModel.class);
+        vehiclesViewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
+            @Override
+            public void onChanged(List<Vehicle> vehicles) {
+                adapter.setCachedVehicles(vehicles);
+            }
+        });
     }
 
     @Override

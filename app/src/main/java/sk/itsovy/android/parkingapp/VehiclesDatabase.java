@@ -2,14 +2,19 @@ package sk.itsovy.android.parkingapp;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.sql.Timestamp;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Vehicle.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class VehiclesDatabase extends RoomDatabase {
 
     // abstraktna metoda
@@ -28,10 +33,35 @@ public abstract class VehiclesDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             VehiclesDatabase.class, "vehicles_database")
+                            .addCallback(callback)
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+
+    // instancna premenna
+    private static RoomDatabase.Callback callback = new RoomDatabase.Callback() {
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+
+            databaseWriteExecutor.execute(()-> {
+                VehiclesDao dao = INSTANCE.vehiclesDao();
+                // ak to tu nie je tak vytvori sa 4x resp. podla poctu vlakien
+                dao.deleteAll();
+
+                Vehicle v1 = new Vehicle();
+                v1.setPlate("KE123AA");
+                v1.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                dao.insert(v1);
+
+                Vehicle v2 = new Vehicle();
+                v2.setPlate("KE256GB");
+                v2.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                dao.insert(v2);
+            });
+        }
+    };
 }

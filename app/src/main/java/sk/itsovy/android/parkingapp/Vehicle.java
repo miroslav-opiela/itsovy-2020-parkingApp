@@ -22,6 +22,14 @@ public class Vehicle {
     @ColumnInfo(name = "timestamp")
     private Timestamp timestamp;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getPlate() {
         return plate;
     }

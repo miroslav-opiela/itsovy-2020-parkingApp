@@ -14,7 +14,13 @@ public class VehiclesAdapter
         extends RecyclerView.Adapter<VehiclesAdapter.VehicleViewHolder> {
 
     // cache verzia dat
+    // mozeme dat = Collections.EMPTY_LIST
     private List<Vehicle> cachedVehicles;
+
+    public void setCachedVehicles(List<Vehicle> cachedVehicles) {
+        this.cachedVehicles = cachedVehicles;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -31,6 +37,9 @@ public class VehiclesAdapter
 
     @Override
     public int getItemCount() {
+        if (cachedVehicles == null) {
+            return 0;
+        }
         return cachedVehicles.size();
     }
 
