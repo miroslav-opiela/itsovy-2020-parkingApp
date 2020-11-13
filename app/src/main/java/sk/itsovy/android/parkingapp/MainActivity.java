@@ -7,6 +7,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                processFabClick();
             }
         });
 
@@ -51,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setCachedVehicles(vehicles);
             }
         });
+    }
+
+    private void processFabClick() {
+        DialogFragment insertDialogFragment = new InsertDialogFragment();
+        insertDialogFragment.show(getSupportFragmentManager(), "insert");
+
     }
 
     @Override
