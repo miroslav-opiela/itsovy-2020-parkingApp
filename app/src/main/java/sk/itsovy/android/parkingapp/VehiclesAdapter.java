@@ -16,10 +16,15 @@ public class VehiclesAdapter
     // cache verzia dat
     // mozeme dat = Collections.EMPTY_LIST
     private List<Vehicle> cachedVehicles;
+    private OnPlateClickListener listener;
 
     public void setCachedVehicles(List<Vehicle> cachedVehicles) {
         this.cachedVehicles = cachedVehicles;
         notifyDataSetChanged();
+    }
+
+    public void setOnPlateClickListener(OnPlateClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -27,7 +32,9 @@ public class VehiclesAdapter
     public VehicleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemLayout = inflater.inflate(R.layout.item_layout, parent, false);
-        return new VehicleViewHolder(itemLayout);
+        VehicleViewHolder holder = new VehicleViewHolder(itemLayout);
+        holder.setOnPlateClickListener(listener);
+        return holder;
     }
 
     @Override
@@ -47,14 +54,25 @@ public class VehiclesAdapter
             extends RecyclerView.ViewHolder {
 
         private TextView textView;
+        private OnPlateClickListener listener;
 
         public VehicleViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.textViewPlate);
         }
 
+        public void setOnPlateClickListener(OnPlateClickListener listener) {
+            this.listener = listener;
+        }
+
         public void bind(Vehicle vehicle) {
             textView.setText(vehicle.getPlate());
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onPlateClick(vehicle);
+                }
+            });
         }
     }
 
