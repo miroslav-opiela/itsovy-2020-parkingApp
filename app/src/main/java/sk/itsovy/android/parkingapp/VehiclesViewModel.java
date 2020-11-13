@@ -26,4 +26,8 @@ public class VehiclesViewModel extends AndroidViewModel {
     public void insert(Vehicle vehicle) {
         repository.insert(vehicle);
     }
+
+    public void delete(Vehicle vehicle) {
+        repository.delete(vehicle);
+    }
 }

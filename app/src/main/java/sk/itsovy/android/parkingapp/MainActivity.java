@@ -85,6 +85,11 @@ public class MainActivity extends AppCompatActivity implements OnPlateClickListe
 
     @Override
     public void onPlateClick(Vehicle vehicle) {
+        ViewModelProvider provider = new ViewModelProvider(this);
+        VehiclesViewModel vehiclesViewModel = provider.get(VehiclesViewModel.class);
 
+        //TODO urobit select a spocitat cenu parkovania
+
+        vehiclesViewModel.delete(vehicle);
     }
 }

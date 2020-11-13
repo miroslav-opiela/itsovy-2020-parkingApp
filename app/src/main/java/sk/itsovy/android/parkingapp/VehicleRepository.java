@@ -29,4 +29,12 @@ public class VehicleRepository {
                 }
         );
     }
+
+    void delete(Vehicle vehicle) {
+        VehiclesDatabase.databaseWriteExecutor.execute(
+                () -> {
+                    vehiclesDao.deleteVehicle(vehicle);
+                }
+        );
+    }
 }
