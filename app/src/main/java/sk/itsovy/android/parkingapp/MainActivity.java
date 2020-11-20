@@ -1,5 +1,7 @@
 package sk.itsovy.android.parkingapp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -10,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +20,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -77,10 +81,16 @@ public class MainActivity extends AppCompatActivity implements OnPlateClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            onSettingsClicked();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onSettingsClicked() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -89,6 +99,16 @@ public class MainActivity extends AppCompatActivity implements OnPlateClickListe
         VehiclesViewModel vehiclesViewModel = provider.get(VehiclesViewModel.class);
 
         //TODO urobit select a spocitat cenu parkovania
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean hourlyRate = pref.getBoolean("rate", true);
+        String message;
+        if (hourlyRate) {
+            message = "Plati sa za hodinu";
+        } else {
+            message = "minutova tarifa";
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
         vehiclesViewModel.delete(vehicle);
     }
