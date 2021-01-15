@@ -13,6 +13,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StableIdKeyProvider;
+import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +29,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnPlateClickListener{
+
+    private SelectionTracker<Long> selectionTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,15 @@ public class MainActivity extends AppCompatActivity implements OnPlateClickListe
                 adapter.setCachedVehicles(vehicles);
             }
         });
+
+        selectionTracker = new SelectionTracker.Builder<Long>(
+                "my-selection-id",
+                recyclerView,
+                new StableIdKeyProvider(recyclerView),
+                new VehiclesLookup(recyclerView),
+                StorageStrategy.createLongStorage()
+        ).build();
+        adapter.setSelectionTracker(selectionTracker);
     }
 
     private void processFabClick() {

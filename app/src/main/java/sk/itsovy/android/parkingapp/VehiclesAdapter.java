@@ -1,11 +1,14 @@
 package sk.itsovy.android.parkingapp;
 
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -17,6 +20,15 @@ public class VehiclesAdapter
     // mozeme dat = Collections.EMPTY_LIST
     private List<Vehicle> cachedVehicles;
     private OnPlateClickListener listener;
+    private SelectionTracker<Long> selectionTracker;
+
+    public VehiclesAdapter() {
+        setHasStableIds(true);
+    }
+
+    public void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
+        this.selectionTracker = selectionTracker;
+    }
 
     public void setCachedVehicles(List<Vehicle> cachedVehicles) {
         this.cachedVehicles = cachedVehicles;
@@ -39,7 +51,15 @@ public class VehiclesAdapter
 
     @Override
     public void onBindViewHolder(@NonNull VehicleViewHolder holder, int position) {
-        holder.bind(cachedVehicles.get(position));
+        boolean isSelected = selectionTracker.isSelected(getItemId(position));
+        Log.d("SELECTION", position + " " + getItemId(position) +
+                " " + isSelected);
+        holder.bind(cachedVehicles.get(position), isSelected);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return cachedVehicles.get(position).getId();
     }
 
     @Override
@@ -65,14 +85,19 @@ public class VehiclesAdapter
             this.listener = listener;
         }
 
-        public void bind(Vehicle vehicle) {
+        public void bind(Vehicle vehicle, boolean isSelected) {
+            if (isSelected) {
+                textView.setTextColor(Color.RED);
+            } else {
+                textView.setTextColor(Color.BLACK);
+            }
             textView.setText(vehicle.getPlate());
-            textView.setOnClickListener(new View.OnClickListener() {
+            /*textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     listener.onPlateClick(vehicle);
                 }
-            });
+            });*/
         }
     }
 
