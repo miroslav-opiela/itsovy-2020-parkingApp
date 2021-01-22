@@ -47,20 +47,18 @@ public abstract class VehiclesDatabase extends RoomDatabase {
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
 
-            databaseWriteExecutor.execute(()-> {
+            databaseWriteExecutor.execute(() -> {
                 VehiclesDao dao = INSTANCE.vehiclesDao();
                 // ak to tu nie je tak vytvori sa 4x resp. podla poctu vlakien
                 dao.deleteAll();
 
-                Vehicle v1 = new Vehicle();
-                v1.setPlate("KE123AA");
-                v1.setTimestamp(new Timestamp(System.currentTimeMillis()));
-                dao.insert(v1);
+                for (int i = 10; i < 35; i++) {
+                    Vehicle v1 = new Vehicle();
+                    v1.setPlate("KE1" + i + "AA");
+                    v1.setTimestamp(new Timestamp(System.currentTimeMillis()));
+                    dao.insert(v1);
+                }
 
-                Vehicle v2 = new Vehicle();
-                v2.setPlate("KE256GB");
-                v2.setTimestamp(new Timestamp(System.currentTimeMillis()));
-                dao.insert(v2);
             });
         }
     };

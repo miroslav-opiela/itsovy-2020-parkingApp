@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnPlateClickListe
                 StorageStrategy.createLongStorage()
         ).build();
         adapter.setSelectionTracker(selectionTracker);
+        selectionTracker.addObserver(new VehicleSelectionObserver(this, selectionTracker));
     }
 
     private void processFabClick() {
