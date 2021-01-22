@@ -4,9 +4,12 @@ import android.app.AppComponentFactory;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.MainThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.selection.SelectionTracker;
+
+import java.util.Iterator;
 
 public class VehicleSelectionObserver extends SelectionTracker.SelectionObserver<Long> implements ActionMode.Callback {
 
@@ -49,11 +52,16 @@ public class VehicleSelectionObserver extends SelectionTracker.SelectionObserver
         // tu vyriesime kliknutie na ikonku a vymazeme vozidla
         if (item.getItemId() == R.id.deleteMenuItem) {
             // tu vymazeme vozidla
+            onDeleteItems(selectionTracker.getSelection().iterator());
             // ukoncime action mode
             mode.finish();
             return true;
         }
         return false;
+    }
+
+    protected void onDeleteItems(Iterator<Long> iterator) {
+
     }
 
     @Override

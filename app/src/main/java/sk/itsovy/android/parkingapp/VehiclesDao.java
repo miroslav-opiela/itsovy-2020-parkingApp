@@ -31,4 +31,6 @@ public interface VehiclesDao {
     @Query("DELETE FROM vehicles WHERE plate=:plate")
     void deleteVehicle(String plate);
 
+    @Query("DELETE FROM vehicles WHERE id=:id")
+    void deleteVehicle(Long id);
 }

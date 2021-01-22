@@ -30,4 +30,8 @@ public class VehiclesViewModel extends AndroidViewModel {
     public void delete(Vehicle vehicle) {
         repository.delete(vehicle);
     }
+
+    public void delete(Long id) {
+        repository.delete(id);
+    }
 }

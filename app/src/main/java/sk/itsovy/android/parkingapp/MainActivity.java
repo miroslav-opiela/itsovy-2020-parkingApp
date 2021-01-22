@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.sql.Timestamp;
+import java.util.Iterator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnPlateClickListener{
@@ -66,18 +67,34 @@ public class MainActivity extends AppCompatActivity implements OnPlateClickListe
         selectionTracker = new SelectionTracker.Builder<Long>(
                 "my-selection-id",
                 recyclerView,
-                new StableIdKeyProvider(recyclerView),
+                new VehiclesKeyProvider(recyclerView),
                 new VehiclesLookup(recyclerView),
                 StorageStrategy.createLongStorage()
         ).build();
         adapter.setSelectionTracker(selectionTracker);
-        selectionTracker.addObserver(new VehicleSelectionObserver(this, selectionTracker));
+        selectionTracker.addObserver(
+                new VehicleSelectionObserver(this, selectionTracker) {
+                    @Override
+                    protected void onDeleteItems(Iterator<Long> iterator) {
+                        remove(iterator);
+                    }
+                });
     }
 
     private void processFabClick() {
         DialogFragment insertDialogFragment = new InsertDialogFragment();
         insertDialogFragment.show(getSupportFragmentManager(), "insert");
 
+    }
+
+    private void remove(Iterator<Long> iterator) {
+        ViewModelProvider provider = new ViewModelProvider(this);
+        VehiclesViewModel vehiclesViewModel = provider.get(VehiclesViewModel.class);
+
+        while(iterator.hasNext()) {
+            Long id = iterator.next();
+            vehiclesViewModel.delete(id);
+        }
     }
 
     @Override

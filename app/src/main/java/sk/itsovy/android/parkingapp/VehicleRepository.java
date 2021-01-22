@@ -37,4 +37,12 @@ public class VehicleRepository {
                 }
         );
     }
+
+    void delete(Long id) {
+        VehiclesDatabase.databaseWriteExecutor.execute(
+                () -> {
+                    vehiclesDao.deleteVehicle(id);
+                }
+        );
+    }
 }
