@@ -34,7 +34,8 @@ public class VehicleSelectionObserver extends SelectionTracker.SelectionObserver
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        // tu pridame ikonku na vymazanie
+        // tu pridame ikonku na vymazanie = tu pridame menu
+        mode.getMenuInflater().inflate(R.menu.action_mode_menu, menu);
         return true;
     }
 
@@ -46,6 +47,12 @@ public class VehicleSelectionObserver extends SelectionTracker.SelectionObserver
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         // tu vyriesime kliknutie na ikonku a vymazeme vozidla
+        if (item.getItemId() == R.id.deleteMenuItem) {
+            // tu vymazeme vozidla
+            // ukoncime action mode
+            mode.finish();
+            return true;
+        }
         return false;
     }
 
